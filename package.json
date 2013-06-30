@@ -7,7 +7,7 @@
     "test": "node_modules/.bin/mocha"
   },
   "author": "Mirko Kiefer <mail@mirkokiefer.com>",
-  "license": "BSD",
+  "license": "MIT",
   "devDependencies": {
     "mocha": "~1.11.0"
   }
