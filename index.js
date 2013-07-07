@@ -21,7 +21,7 @@ var forEachAsync = function(iterator, fn, cb) {
 var map = function(iterator, fn, cb) {
   var result = []
   forEach(iterator, function(err, res) {
-    result.push(fn(err, res))
+    result.push(fn.apply(this, arguments))
   }, function(err) {
     cb(err, result)
   })

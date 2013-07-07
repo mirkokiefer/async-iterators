@@ -1,6 +1,6 @@
 {
   "name": "async-iterators",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "utility functions for async iterators",
   "main": "index.js",
   "scripts": {
