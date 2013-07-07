@@ -9,7 +9,7 @@ var createMockAsyncIterator = function() {
   var next = function(cb) {
     setTimeout(function() {
       index++
-      cb(null, data[index])
+      cb(null, data[index], index)
     }, 1)
   }
   return {next: next}
@@ -17,8 +17,9 @@ var createMockAsyncIterator = function() {
 
 var runForEachIteratorTest = function(iterator, cb) {
   var index = 0
-  iterators.forEach(iterator, function(err, res) {
+  iterators.forEach(iterator, function(err, res, i) {
     assert.equal(res, data[index])
+    assert.equal(i, index)
     index++
   }, function() {
     assert.equal(index, 5)
@@ -34,8 +35,10 @@ describe('async-iterators', function() {
   it('should run forEachAsync', function(done) {
     var iterator = createMockAsyncIterator()
     var index = 0
-    iterators.forEachAsync(iterator, function(err, res, cb) {
+    iterators.forEachAsync(iterator, function(err, res, i, cb) {
+
       assert.equal(res, data[index])
+      assert.equal(i, index)
       index++
       cb()
     }, function() {
@@ -44,19 +47,25 @@ describe('async-iterators', function() {
     })
   })
   it('should run map', function(done) {
+    var index = 0
     var iterator = createMockAsyncIterator()
     iterators.map(iterator, function(err, res) {
       return res * 2
     }, function(err, res) {
       res.forEach(function(each, i) {
         assert.equal(each, data[i] * 2)
+        assert.equal(i, index)
+        index++
       })
       done()
     })
   })
   it('should run mapAsync', function(done) {
+    var index = 0
     var iterator = createMockAsyncIterator()
-    iterators.mapAsync(iterator, function(err, res, cb) {
+    iterators.mapAsync(iterator, function(err, res, i, cb) {
+      assert.equal(i, index)
+      index++
       cb(null, res * 2)
     }, function(err, res) {
       res.forEach(function(each, i) {
