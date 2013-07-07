@@ -49,13 +49,13 @@ describe('async-iterators', function() {
   it('should run map', function(done) {
     var index = 0
     var iterator = createMockAsyncIterator()
-    iterators.map(iterator, function(err, res) {
+    iterators.map(iterator, function(err, res, i) {
+      assert.equal(i, index)
+      index++
       return res * 2
     }, function(err, res) {
       res.forEach(function(each, i) {
         assert.equal(each, data[i] * 2)
-        assert.equal(i, index)
-        index++
       })
       done()
     })
@@ -63,7 +63,7 @@ describe('async-iterators', function() {
   it('should run mapAsync', function(done) {
     var index = 0
     var iterator = createMockAsyncIterator()
-    iterators.mapAsync(iterator, function(err, res, i, cb) {
+    iterators.mapAsync(iterator, function(err, res, i, cb ) {
       assert.equal(i, index)
       index++
       cb(null, res * 2)
