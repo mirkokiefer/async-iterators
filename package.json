@@ -1,6 +1,6 @@
 {
   "name": "async-iterators",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "utility functions for async iterators",
   "homepage": "https://github.com/mirkokiefer/async-iterators",
   "main": "index.js",
