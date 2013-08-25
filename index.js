@@ -1,4 +1,6 @@
 
+var EventEmitter = require('events').EventEmitter
+
 var forEach = function(iterator, fn, cb) {
   iterator.next(function(err, res) {
     if (res === undefined) return cb(err, undefined)
@@ -75,6 +77,49 @@ var filterAsync = function(iterator, fn) {
   }
 }
 
+var buffer = function(iterator, size) {
+  var buffer = []
+  var bufferingInProgress = false
+  var hasEnded = false
+  var bufferEvents = new EventEmitter()
+  var readBuffer = function(cb) {
+    publicEvents.emit('buffered', buffer.length)
+    if (buffer.length) {
+      var value = buffer.shift()
+      cb(null, value)
+    } else {
+      if (!bufferingInProgress) fillBuffer(cb)
+      bufferEvents.once('data', function() {
+        readBuffer(cb)
+      })
+    }
+    if (!bufferingInProgress && !hasEnded && buffer.length < size) {
+      fillBuffer()
+    }
+  }
+  var fillBuffer = function(cb) {
+    bufferingInProgress = true
+    if ((buffer.length >= size) || hasEnded) {
+      bufferingInProgress = false
+      return
+    }
+    iterator.next(function(err, res) {
+      if (res === undefined) hasEnded = true
+      buffer.push(res)
+      bufferEvents.emit('data')
+      fillBuffer(cb)
+    })
+  }
+
+  var publicEvents = new EventEmitter()
+  publicEvents.next = function(cb) {
+    readBuffer(function(err, res) {
+      cb(err, res)
+    })
+  }
+  return publicEvents
+}
+
 var toArray = function(iterator, cb) {
   var array = []
   forEach(iterator, function(err, each) {
@@ -91,5 +136,6 @@ module.exports = {
   mapAsync: mapAsync,
   filter: filter,
   filterAsync: filterAsync,
+  buffer: buffer,
   toArray: toArray
 }
