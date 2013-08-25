@@ -82,18 +82,11 @@ var buffer = function(iterator, size) {
   var bufferingInProgress = false
   var hasEnded = false
   var bufferEvents = new EventEmitter()
-  var popBuffer = function() {
-    return buffer.shift()
-  }
-  var pushBuffer = function(data) {
-    buffer.push(data)
-  }
+
   var readBuffer = function(cb) {
     if (buffer.length) {
-      var value = popBuffer()
-      cb(null, value)
+      cb(null, buffer.shift())
     } else {
-      if (!bufferingInProgress) fillBuffer(cb)
       bufferEvents.once('data', function() {
         readBuffer(cb)
       })
@@ -102,6 +95,7 @@ var buffer = function(iterator, size) {
       fillBuffer()
     }
   }
+
   var fillBuffer = function(cb) {
     bufferingInProgress = true
     if ((buffer.length >= size) || hasEnded) {
@@ -110,7 +104,7 @@ var buffer = function(iterator, size) {
     }
     iterator.next(function(err, res) {
       if (res === undefined) hasEnded = true
-      pushBuffer(res)
+      buffer.push(res)
       bufferEvents.emit('data')
       fillBuffer(cb)
     })
