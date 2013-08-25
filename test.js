@@ -3,6 +3,7 @@ var assert = require('assert')
 var iterators = require('./index')
 
 var data = [1, 2, 3, 4, 5]
+var dataDoubled = data.map(function(each) { return each * 2 })
 
 var createMockAsyncIterator = function() {
   var index = -1
@@ -51,25 +52,23 @@ describe('async-iterators', function() {
       done()
     })
   })
-  it('should run map', function(done) {
+  it('should create map iterator and pipe to array', function(done) {
     var iterator = createMockAsyncIterator()
-    iterators.map(iterator, function(err, each) {
+    var doublingIterator = iterators.map(iterator, function(err, each) {
       return each * 2
-    }, function(err, res) {
-      res.forEach(function(each, i) {
-        assert.equal(each, data[i] * 2)
-      })
+    })
+    iterators.toArray(doublingIterator, function(err, res) {
+      assert.deepEqual(res, dataDoubled)
       done()
     })
   })
   it('should run mapAsync', function(done) {
     var iterator = createMockAsyncIterator()
-    iterators.mapAsync(iterator, function(err, each, cb) {
+    var doublingIterator = iterators.mapAsync(iterator, function(err, each, cb) {
       cb(null, each * 2)
-    }, function(err, res) {
-      res.forEach(function(each, i) {
-        assert.equal(each, data[i] * 2)
-      })
+    })
+    iterators.toArray(doublingIterator, function(err, res) {
+      assert.deepEqual(res, dataDoubled)
       done()
     })
   })

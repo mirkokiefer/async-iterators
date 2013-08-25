@@ -16,25 +16,29 @@ var forEachAsync = function(iterator, fn, cb) {
   })
 }
 
-var map = function(iterator, fn, cb) {
-  var result = []
-  forEach(iterator, function(err, res) {
-    result.push(fn(err, res))
-  }, function(err) {
-    cb(err, result)
-  })
+var map = function(iterator, fn) {
+  return {
+    next: function(cb) {
+      iterator.next(function(err, res) {
+        if ((res === undefined) || err) return cb(err, undefined)
+        var mappedRes = fn(err, res)
+        cb(err, mappedRes)
+      })
+    }
+  }
 }
 
 var mapAsync = function(iterator, fn, cb) {
-  var result = []
-  forEachAsync(iterator, function(err, res, cb) {
-    fn(err, res, function(err, mapRes) {
-      result.push(mapRes)
-      cb()
-    })
-  }, function(err) {
-    cb(err, result)
-  })
+  return {
+    next: function(cb) {
+      iterator.next(function(err, res) {
+        if ((res === undefined) || err) return cb(err, undefined)
+        fn(err, res, function(err, mappedRes) {
+          cb(err, mappedRes)          
+        })
+      })
+    }
+  }
 }
 
 var toArray = function(iterator, cb) {
