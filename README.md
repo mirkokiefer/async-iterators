@@ -1,4 +1,8 @@
 #async-iterators
+[![Build Status](https://travis-ci.org/mirkokiefer/async-iterators.png?branch=master)](https://travis-ci.org/mirkokiefer/async-iterators)
+
+[![NPM](https://nodei.co/npm/async-iterators.png)](https://nodei.co/npm/async-iterators/)
+
 Utility functions for async iterators in Node.js.
 
 An async iterator is an object with a `next(cb)` method.
