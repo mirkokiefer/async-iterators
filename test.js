@@ -7,7 +7,8 @@ var numbers = []
 for (var i = 1; i < 100; i++) {
   numbers.push(i)
 }
-var numbersDoubled = numbers.map(function(each) { return each * 2 })
+var doubleFn = function(each) { return each * 2 }
+var numbersDoubled = numbers.map(doubleFn)
 
 var createMockAsyncIterator = function() {
   var index = -1
@@ -59,17 +60,7 @@ describe('async-iterators', function() {
   it('should create map iterator and pipe to array', function(done) {
     var iterator = createMockAsyncIterator()
     var doublingIterator = iterators.map(iterator, function(err, each) {
-      return each * 2
-    })
-    iterators.toArray(doublingIterator, function(err, res) {
-      assert.deepEqual(res, numbersDoubled)
-      done()
-    })
-  })
-  it('should create map iterator and pipe to array', function(done) {
-    var iterator = createMockAsyncIterator()
-    var doublingIterator = iterators.map(iterator, function(err, each) {
-      return each * 2
+      return doubleFn(each)
     })
     iterators.toArray(doublingIterator, function(err, res) {
       assert.deepEqual(res, numbersDoubled)
@@ -79,7 +70,7 @@ describe('async-iterators', function() {
   it('should run mapAsync', function(done) {
     var iterator = createMockAsyncIterator()
     var doublingIterator = iterators.mapAsync(iterator, function(err, each, cb) {
-      cb(null, each * 2)
+      cb(null, doubleFn(each))
     })
     iterators.toArray(doublingIterator, function(err, res) {
       assert.deepEqual(res, numbersDoubled)
