@@ -5,7 +5,7 @@
   "homepage": "https://github.com/mirkokiefer/async-iterators",
   "main": "index.js",
   "scripts": {
-    "test": "node_modules/.bin/mocha"
+    "test": "node_modules/.bin/mocha -R spec"
   },
   "author": "Mirko Kiefer <mail@mirkokiefer.com>",
   "license": "MIT",

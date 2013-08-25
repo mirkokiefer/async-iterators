@@ -2,7 +2,11 @@
 var assert = require('assert')
 var iterators = require('./index')
 
-var numbers = [1, 2, 3, 4, 5]
+
+var numbers = []
+for (var i = 1; i < 100; i++) {
+  numbers.push(i)
+}
 var numbersDoubled = numbers.map(function(each) { return each * 2 })
 
 var createMockAsyncIterator = function() {
@@ -23,7 +27,7 @@ var runForEachIteratorTest = function(iterator, cb) {
     assert.equal(each, numbers[index])
     index++
   }, function() {
-    assert.equal(index, 5)
+    assert.equal(index, numbers.length)
     cb()
   })
 }
@@ -41,7 +45,7 @@ describe('async-iterators', function() {
       index++
       cb()
     }, function() {
-      assert.equal(index, 5)
+      assert.equal(index, numbers.length)
       done()
     })
   })
