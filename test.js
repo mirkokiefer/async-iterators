@@ -116,4 +116,11 @@ describe('async-iterators', function() {
       done()
     })
   })
+  it('should create an array iterator', function(done) {
+    var arrayIterator = iterators.fromArray(numbers)
+    iterators.toArray(arrayIterator, function(err, res) {
+      assert.deepEqual(res, numbers)
+      done()
+    })
+  })
 })

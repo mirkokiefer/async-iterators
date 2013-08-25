@@ -121,6 +121,18 @@ var buffer = function(iterator, size) {
   return publicObj
 }
 
+var fromArray = function(array, cb) {
+  var i = 0
+  return {
+    next: function(cb) {
+      if (i == array.length) return cb(null, undefined)
+      var value = array[i]
+      i++
+      cb(null, value)
+    }
+  }
+}
+
 var toArray = function(iterator, cb) {
   var array = []
   forEach(iterator, function(err, each) {
@@ -138,5 +150,6 @@ module.exports = {
   filter: filter,
   filterAsync: filterAsync,
   buffer: buffer,
+  fromArray: fromArray,
   toArray: toArray
 }
