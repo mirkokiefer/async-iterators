@@ -2,16 +2,16 @@
 var assert = require('assert')
 var iterators = require('./index')
 
-var data = [1, 2, 3, 4, 5]
-var dataDoubled = data.map(function(each) { return each * 2 })
+var numbers = [1, 2, 3, 4, 5]
+var numbersDoubled = numbers.map(function(each) { return each * 2 })
 
 var createMockAsyncIterator = function() {
   var index = -1
   var next = function(cb) {
     setTimeout(function() {
       index++
-      if (!data[index]) return cb(null, undefined)
-      cb(null, data[index])
+      if (!numbers[index]) return cb(null, undefined)
+      cb(null, numbers[index])
     }, 1)
   }
   return {next: next}
@@ -20,7 +20,7 @@ var createMockAsyncIterator = function() {
 var runForEachIteratorTest = function(iterator, cb) {
   var index = 0
   iterators.forEach(iterator, function(err, each) {
-    assert.equal(each, data[index])
+    assert.equal(each, numbers[index])
     index++
   }, function() {
     assert.equal(index, 5)
@@ -37,7 +37,7 @@ describe('async-iterators', function() {
     var iterator = createMockAsyncIterator()
     var index = 0
     iterators.forEachAsync(iterator, function(err, each, cb) {
-      assert.equal(each, data[index])
+      assert.equal(each, numbers[index])
       index++
       cb()
     }, function() {
@@ -48,7 +48,7 @@ describe('async-iterators', function() {
   it('should pipe iterator to array', function(done) {
     var iterator = createMockAsyncIterator()
     iterators.toArray(iterator, function(err, res) {
-      assert.deepEqual(res, data)
+      assert.deepEqual(res, numbers)
       done()
     })
   })
@@ -58,7 +58,17 @@ describe('async-iterators', function() {
       return each * 2
     })
     iterators.toArray(doublingIterator, function(err, res) {
-      assert.deepEqual(res, dataDoubled)
+      assert.deepEqual(res, numbersDoubled)
+      done()
+    })
+  })
+  it('should create map iterator and pipe to array', function(done) {
+    var iterator = createMockAsyncIterator()
+    var doublingIterator = iterators.map(iterator, function(err, each) {
+      return each * 2
+    })
+    iterators.toArray(doublingIterator, function(err, res) {
+      assert.deepEqual(res, numbersDoubled)
       done()
     })
   })
@@ -68,7 +78,7 @@ describe('async-iterators', function() {
       cb(null, each * 2)
     })
     iterators.toArray(doublingIterator, function(err, res) {
-      assert.deepEqual(res, dataDoubled)
+      assert.deepEqual(res, numbersDoubled)
       done()
     })
   })
