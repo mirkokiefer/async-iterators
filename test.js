@@ -36,11 +36,11 @@ var runForEachIteratorTest = function(iterator, cb) {
 }
 
 describe('async-iterators', function() {
-  it('should run forEach', function(done) {
+  it('should run forEach on an iterator', function(done) {
     var iterator = createMockAsyncIterator()
     runForEachIteratorTest(iterator, done)
   })
-  it('should run forEachAsync', function(done) {
+  it('should run forEachAsync on an iterator', function(done) {
     var iterator = createMockAsyncIterator()
     var index = 0
     iterators.forEachAsync(iterator, function(err, each, cb) {
@@ -52,14 +52,14 @@ describe('async-iterators', function() {
       done()
     })
   })
-  it('should pipe iterator to array', function(done) {
+  it('should pipe an iterator to an array', function(done) {
     var iterator = createMockAsyncIterator()
     iterators.toArray(iterator, function(err, res) {
       assert.deepEqual(res, numbers)
       done()
     })
   })
-  it('should create map iterator and pipe to array', function(done) {
+  it('should create a map iterator and pipe to array', function(done) {
     var iterator = createMockAsyncIterator()
     var doublingIterator = iterators.map(iterator, function(err, each) {
       return doubleFn(each)
@@ -69,7 +69,7 @@ describe('async-iterators', function() {
       done()
     })
   })
-  it('should create asyncMap iterator', function(done) {
+  it('should create an asyncMap iterator', function(done) {
     var iterator = createMockAsyncIterator()
     var doublingIterator = iterators.mapAsync(iterator, function(err, each, cb) {
       cb(null, doubleFn(each))
@@ -89,7 +89,7 @@ describe('async-iterators', function() {
       done()
     })
   })
-  it('should create async filter iterator', function(done) {
+  it('should create an async filter iterator', function(done) {
     var iterator = createMockAsyncIterator()
     var filterIterator = iterators.filterAsync(iterator, function(err, each, cb) {
       cb(null, evenFn(each))
