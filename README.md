@@ -3,7 +3,7 @@
 
 [![NPM](https://nodei.co/npm/async-iterators.png)](https://nodei.co/npm/async-iterators/)
 
-Useful abstractins and utility functions for async iterators in Node.js.
+Useful abstractions and utility functions for async iterators in Node.js.
 
 An async iterator is an object with a `next(cb)` method.
 Invoking the method should return the next item of an underlying data source.
