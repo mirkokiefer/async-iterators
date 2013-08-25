@@ -44,6 +44,7 @@ iterators.toArray(doublingIterator, function(err, res) {
 ###Abstract Iterators
 - [map](#map) / [mapAsync](#mapAsync)
 - [filter](#filter) / [filterAsync](#filterAsync)
+- [buffer](#buffer)
 
 ###Utilities
 - [forEach](#forEach)
@@ -90,6 +91,25 @@ var evenNumbersIterator = iterators.filter(someNumberIterator, function(err, eac
 var evenNumbersIterator = iterators.filter(someNumberIterator, function(err, each, cb) {
   cb(null, (each % 2) == 0)
 })
+```
+
+<a name="buffer" />
+### buffer(iterator, bufferSize)
+Creates an iterator with an internal buffer that is always filled until `bufferSize`.
+The buffer can abviously only grow if the buffer iterator is read slower than the underlying iterator source can return data.
+
+The current buffer fill ratio can be inspected at any time using `bufferFillRatio()` which returns a number between 0..1.
+
+The buffer size can be changed using `setBufferSize(bufferSize)`.
+
+``` js
+var bufferedIterator = iterators.buffer(someIterator, 10)
+
+// inspect buffer size
+console.log(bufferedIterator.bufferFillRatio())
+
+// change the buffer size later
+bufferedIterator.setBufferSize(100)
 ```
 
 ##Utilities

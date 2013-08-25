@@ -102,19 +102,17 @@ describe('async-iterators', function() {
   it('should create a buffering iterator', function(done) {
     var iterator = createMockAsyncIterator()
     var bufferIterator = iterators.buffer(iterator, 10)
-    var avgBufferSize = 0
-    bufferIterator.on('buffered', function(bufferSize) {
-      avgBufferSize += bufferSize / numbers.length
-    })
+    var bufferFillRatio = 0
     var slowMapIterator = iterators.mapAsync(bufferIterator, function(err, res, cb) {
       setTimeout(function() {
+        bufferFillRatio += bufferIterator.bufferFillRatio() / numbers.length
         cb(null, res)
       }, 2)
     })
     iterators.toArray(slowMapIterator, function(err, res) {
       assert.deepEqual(res, numbers)
-      console.log(avgBufferSize)
-      assert.ok(avgBufferSize > 1)
+      console.log(bufferFillRatio)
+      assert.ok(bufferFillRatio > 0.5)
       done()
     })
   })

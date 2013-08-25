@@ -82,10 +82,15 @@ var buffer = function(iterator, size) {
   var bufferingInProgress = false
   var hasEnded = false
   var bufferEvents = new EventEmitter()
+  var popBuffer = function() {
+    return buffer.shift()
+  }
+  var pushBuffer = function(data) {
+    buffer.push(data)
+  }
   var readBuffer = function(cb) {
-    publicEvents.emit('buffered', buffer.length)
     if (buffer.length) {
-      var value = buffer.shift()
+      var value = popBuffer()
       cb(null, value)
     } else {
       if (!bufferingInProgress) fillBuffer(cb)
@@ -105,19 +110,21 @@ var buffer = function(iterator, size) {
     }
     iterator.next(function(err, res) {
       if (res === undefined) hasEnded = true
-      buffer.push(res)
+      pushBuffer(res)
       bufferEvents.emit('data')
       fillBuffer(cb)
     })
   }
 
-  var publicEvents = new EventEmitter()
-  publicEvents.next = function(cb) {
-    readBuffer(function(err, res) {
-      cb(err, res)
-    })
+  var publicObj = {
+    bufferFillRatio: function() { return buffer.length / size },
+    next: function(cb) {
+      readBuffer(function(err, res) {
+        cb(err, res)
+      })
+    }
   }
-  return publicEvents
+  return publicObj
 }
 
 var toArray = function(iterator, cb) {
