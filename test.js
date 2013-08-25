@@ -44,6 +44,13 @@ describe('async-iterators', function() {
       done()
     })
   })
+  it('should pipe iterator to array', function(done) {
+    var iterator = createMockAsyncIterator()
+    iterators.toArray(iterator, function(err, res) {
+      assert.deepEqual(res, data)
+      done()
+    })
+  })
   it('should run map', function(done) {
     var iterator = createMockAsyncIterator()
     iterators.map(iterator, function(err, each) {

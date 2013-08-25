@@ -37,9 +37,19 @@ var mapAsync = function(iterator, fn, cb) {
   })
 }
 
+var toArray = function(iterator, cb) {
+  var array = []
+  forEach(iterator, function(err, each) {
+    array.push(each)
+  }, function() {
+    cb(null, array)
+  })
+}
+
 module.exports = {
   forEach: forEach,
   forEachAsync: forEachAsync,
   map: map,
-  mapAsync: mapAsync
+  mapAsync: mapAsync,
+  toArray: toArray
 }
