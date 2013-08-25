@@ -4,11 +4,12 @@
 [![NPM](https://nodei.co/npm/async-iterators.png)](https://nodei.co/npm/async-iterators/)
 
 Utility functions for async iterators in Node.js.
+This library gives you some useful abstract iterators and utility functions.
 
 An async iterator is an object with a `next(cb)` method.
 Invoking the method should return the next item of an underlying data source.
 
-This library gives you some useful abstract iterators and utility functions.
+Async iterators can easily be created from Node.js [Readable Streams](http://nodejs.org/api/stream.html#stream_class_stream_readable) by using [stream-iterator](https://github.com/mirkokiefer/stream-iterator).
 
 An example with a pointless iterator that asynchronously returns the numbers from 1 to 100:
 
