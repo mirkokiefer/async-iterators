@@ -7,6 +7,8 @@ Useful abstractions and utility functions for async iterators in Node.js.
 
 An async iterator is an object with a `next(cb)` method.
 Invoking the method should return the next item of an underlying data source.
+The callback should be a function of type `function(err, value)`.
+If the iterator has no more data to read, it will call the callback with `value == undefined`.
 
 Async iterators can easily be created from Node.js [Readable Streams](http://nodejs.org/api/stream.html#stream_class_stream_readable) by using [stream-iterator](https://github.com/mirkokiefer/stream-iterator).
 
@@ -40,10 +42,11 @@ iterators.toArray(doublingIterator, function(err, res) {
 ```
 
 ##Documentation
-###Abstract Iterators
+###Iterators
 - [map](#map) / [mapAsync](#mapAsync)
 - [filter](#filter) / [filterAsync](#filterAsync)
 - [buffer](#buffer)
+- [fromArray](#fromArray)
 
 ###Utilities
 - [forEach](#forEach)
@@ -53,6 +56,7 @@ iterators.toArray(doublingIterator, function(err, res) {
 
 <a name="map" />
 ### map(iterator, mapFn)
+Create an iterator that applies a map function to transform each value of the source iterator.
 
 ``` js
 var mapIterator = iterators.map(someNumberIterator, function(err, each) {
@@ -75,6 +79,8 @@ var mapIterator = iterators.map(someNumberIterator, function(err, each, cb) {
 ```
 
 <a name="filter" />
+Create an iterator that filters the values of the source iterator using a filter function.
+
 ### filter(iterator, filterFn)
 
 ``` js
@@ -111,10 +117,19 @@ console.log(bufferedIterator.bufferFillRatio())
 bufferedIterator.setBufferSize(100)
 ```
 
+<a name="fromArray" />
+### fromArray(array)
+Creates an iterator from an array.
+
+``` js
+var arrayIterator = iterators.fromArray(numbers)
+```
+
 ##Utilities
 
 <a name="forEach" />
 ### forEach(iterator, fn, cb)
+Reads the source iterator until the end and invokes `fn` for each value of the iterator.
 
 ``` js
 iterators.forEach(someIterator, function(err, data) {
@@ -124,8 +139,23 @@ iterators.forEach(someIterator, function(err, data) {
 })
 ```
 
+<a name="forEachAsync" />
+### forEachAsync(iterator, fn, cb)
+Reads the source iterator until the end and invokes `fn` for each value of the iterator.
+Only once the callback is invoked the next value is read from the source iterator.
+
+``` js
+iterators.forEachAsync(someIterator, function(err, data, cb) {
+  console.log(data)
+  setTimeout(cb, 100)
+}, function() {
+  console.log('end')
+})
+```
+
 <a name="toArray" />
 ### toArray(iterator, cb)
+Reads the source iterator until the end and writes the values to an array.
 
 ``` js
 iterators.toArray(someIterator, function(err, array) {
