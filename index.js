@@ -28,7 +28,7 @@ var map = function(iterator, fn) {
   }
 }
 
-var mapAsync = function(iterator, fn, cb) {
+var mapAsync = function(iterator, fn) {
   return {
     next: function(cb) {
       iterator.next(function(err, res) {
@@ -38,6 +38,40 @@ var mapAsync = function(iterator, fn, cb) {
         })
       })
     }
+  }
+}
+
+var filter = function(iterator, fn) {
+  var next = function(cb) {
+    iterator.next(function(err, res) {
+      if (res === undefined) return cb(err, undefined)
+      if (fn(err, res)) {
+        cb(null, res)
+      } else {
+        next(cb)
+      }
+    })
+  }
+  return {
+    next: next
+  }
+}
+
+var filterAsync = function(iterator, fn) {
+  var next = function(cb) {
+    iterator.next(function(err, res) {
+      if (res === undefined) return cb(err, undefined)
+      fn(err, res, function(err, passedFilter) {
+        if (passedFilter)  {
+          cb(null, res)
+        } else {
+          next(cb)
+        }
+      })
+    })
+  }
+  return {
+    next: next
   }
 }
 
@@ -55,5 +89,7 @@ module.exports = {
   forEachAsync: forEachAsync,
   map: map,
   mapAsync: mapAsync,
+  filter: filter,
+  filterAsync: filterAsync,
   toArray: toArray
 }

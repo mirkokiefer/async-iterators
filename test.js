@@ -9,6 +9,8 @@ for (var i = 1; i < 100; i++) {
 }
 var doubleFn = function(each) { return each * 2 }
 var numbersDoubled = numbers.map(doubleFn)
+var evenFn = function(each) { return (each % 2) == 0 }
+var evenNumbers = numbers.filter(evenFn)
 
 var createMockAsyncIterator = function() {
   var index = -1
@@ -67,7 +69,7 @@ describe('async-iterators', function() {
       done()
     })
   })
-  it('should run mapAsync', function(done) {
+  it('should create asyncMap iterator', function(done) {
     var iterator = createMockAsyncIterator()
     var doublingIterator = iterators.mapAsync(iterator, function(err, each, cb) {
       cb(null, doubleFn(each))
@@ -77,4 +79,25 @@ describe('async-iterators', function() {
       done()
     })
   })
+  it('should create a filter iterator', function(done) {
+    var iterator = createMockAsyncIterator()
+    var filterIterator = iterators.filter(iterator, function(err, each) {
+      return evenFn(each)
+    })
+    iterators.toArray(filterIterator, function(err, res) {
+      assert.deepEqual(res, evenNumbers)
+      done()
+    })
+  })
+  it('should create async filter iterator', function(done) {
+    var iterator = createMockAsyncIterator()
+    var filterIterator = iterators.filterAsync(iterator, function(err, each, cb) {
+      cb(null, evenFn(each))
+    })
+    iterators.toArray(filterIterator, function(err, res) {
+      assert.deepEqual(res, evenNumbers)
+      done()
+    })
+  })
+
 })
