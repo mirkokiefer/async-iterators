@@ -49,9 +49,12 @@ iterators.toArray(doublingIterator, function(err, res) {
 - [buffer](#buffer)
 - [fromArray](#fromArray)
 
+###Iterator Targets
+- [toArray](#toArray)
+- [toWritableStream](#toWritableStream)
+
 ###Utilities
 - [forEach](#forEach)
-- [toArray](#toArray)
 
 ##Abstract Iterators
 
@@ -136,6 +139,29 @@ Creates an iterator from an array.
 var arrayIterator = iterators.fromArray(numbers)
 ```
 
+##Iterator Targets
+
+<a name="toArray" />
+### toArray(iterator, cb)
+Reads the source iterator and writes the results to an array.
+
+``` js
+iterators.toArray(someIterator, function(err, array) {
+  console.log(array)
+})
+```
+
+<a name="toWritableStream" />
+### toWritableStream(iterator, writeStream, encoding, cb)
+Reads the source iterator and writes the result to a [Writable Stream](http://nodejs.org/api/stream.html#stream_class_stream_writable).
+
+``` js
+var writeStream = fs.createWriteStream('output.txt')
+iterators.toWritableStream(iterator, writeStream, 'utf8', function() {
+  console.log('done')
+})
+```
+
 ##Utilities
 
 <a name="forEach" />
@@ -161,16 +187,6 @@ iterators.forEachAsync(someIterator, function(err, data, cb) {
   setTimeout(cb, 100)
 }, function() {
   console.log('end')
-})
-```
-
-<a name="toArray" />
-### toArray(iterator, cb)
-Reads the source iterator until the end and writes the values to an array.
-
-``` js
-iterators.toArray(someIterator, function(err, array) {
-  console.log(array)
 })
 ```
 
