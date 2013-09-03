@@ -166,7 +166,7 @@ iterators.toWritableStream(iterator, writeStream, 'utf8', function() {
 
 <a name="forEach" />
 ### forEach(iterator, fn, cb)
-Reads the source iterator until the end and invokes `fn` for each value of the iterator.
+Reads the source iterator and invokes `fn` for each value of the iterator.
 
 ``` js
 iterators.forEach(someIterator, function(err, data) {
@@ -178,7 +178,7 @@ iterators.forEach(someIterator, function(err, data) {
 
 <a name="forEachAsync" />
 ### forEachAsync(iterator, fn, cb)
-Reads the source iterator until the end and invokes `fn` for each value of the iterator.
+Reads the source iterator and invokes `fn` for each value of the iterator.
 Only once the callback is invoked the next value is read from the source iterator.
 
 ``` js
