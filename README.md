@@ -42,12 +42,15 @@ iterators.toArray(doublingIterator, function(err, res) {
 ```
 
 ##Documentation
-###Iterators
+###Iterator Sources
+- [fromArray](#fromArray)
+- [fromReadableStream](#fromReadableStream)
+
+###Transforming Iterators
 - [map](#map) / [mapAsync](#mapAsync)
 - [filter](#filter) / [filterAsync](#filterAsync)
 - [range](#range)
 - [buffer](#buffer)
-- [fromArray](#fromArray)
 
 ###Iterator Targets
 - [toArray](#toArray)
@@ -56,7 +59,26 @@ iterators.toArray(doublingIterator, function(err, res) {
 ###Utilities
 - [forEach](#forEach)
 
-##Abstract Iterators
+##Iterator Sources
+
+<a name="fromArray" />
+### fromArray(array)
+Creates an iterator from an array.
+
+``` js
+var arrayIterator = iterators.fromArray(numbers)
+```
+
+<a name="fromReadableStream" />
+### fromReadableStream(readableStream)
+Creates an iterator from a [Readable Stream](http://nodejs.org/api/stream.html#stream_class_stream_readable).
+
+``` js
+var readStream = fs.createReadStream('input.txt', {encoding: 'utf8'})
+var streamIterator = iterators.fromReadableStream(readStream)
+```
+
+##Transforming Iterators
 
 <a name="map" />
 ### map(iterator, mapFn)
@@ -129,14 +151,6 @@ console.log(bufferedIterator.bufferFillRatio())
 
 // change the buffer size later
 bufferedIterator.setBufferSize(100)
-```
-
-<a name="fromArray" />
-### fromArray(array)
-Creates an iterator from an array.
-
-``` js
-var arrayIterator = iterators.fromArray(numbers)
 ```
 
 ##Iterator Targets
