@@ -45,6 +45,7 @@ iterators.toArray(doublingIterator, function(err, res) {
 ###Iterators
 - [map](#map) / [mapAsync](#mapAsync)
 - [filter](#filter) / [filterAsync](#filterAsync)
+- [range](#range)
 - [buffer](#buffer)
 - [fromArray](#fromArray)
 
@@ -96,6 +97,16 @@ var evenNumbersIterator = iterators.filter(someNumberIterator, function(err, eac
 var evenNumbersIterator = iterators.filter(someNumberIterator, function(err, each, cb) {
   cb(null, (each % 2) == 0)
 })
+```
+
+<a name="range" />
+### range(iterator, range)
+Creates an iterator that only iteratores over the specified range.
+
+`range` is specified as `{from: startIndex, to: endIndex}` where `from` and `to` are both inclusive.
+
+``` js
+var rangeIterator = iterators.range(iterator, {from: 10, to: 19})
 ```
 
 <a name="buffer" />
