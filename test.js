@@ -1,7 +1,7 @@
 
 var assert = require('assert')
 var iterators = require('./index')
-
+var fs = require('fs')
 
 var numbers = []
 for (var i = 1; i < 100; i++) {
@@ -144,6 +144,20 @@ describe('async-iterators', function() {
     var rangeIterator = iterators.range(iterator, {to: 19})
     iterators.toArray(rangeIterator, function(err, res) {
       assert.deepEqual(res, numbers.slice(0, 20))
+      done()
+    })
+  })
+  it('should write an iterator to a writable stream', function(done) {
+    var path = __dirname + '/output.txt'
+    var writeStream = fs.createWriteStream(path)
+    var iterator = createMockAsyncIterator()
+    var stringIterator = iterators.map(iterator, function(err, res) {
+      return res.toString()
+    })
+    iterators.toWritableStream(stringIterator, writeStream, 'utf8', function() {
+      var output = fs.readFileSync(path, {encoding: 'utf8'})
+      fs.unlinkSync(path)
+      assert.deepEqual(output, numbers.join(''))
       done()
     })
   })

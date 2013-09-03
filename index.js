@@ -157,6 +157,20 @@ var range = function(iterator, opts) {
   return {next: next}
 }
 
+var toWritableStream = function(iterator, writeStream, encoding, cb) {
+  write(cb);
+  function write(cb) {
+    iterator.next(function(err, res) {
+      if (res === undefined) return writeStream.write('', encoding, cb)
+      if (writeStream.write(res, encoding)) {
+        write(cb)
+      } else {
+        writeStream.once('drain', function() { write(cb) })
+      }
+    })
+  }
+}
+
 module.exports = {
   forEach: forEach,
   forEachAsync: forEachAsync,
@@ -167,5 +181,6 @@ module.exports = {
   buffer: buffer,
   fromArray: fromArray,
   toArray: toArray,
+  toWritableStream: toWritableStream,
   range: range
 }
