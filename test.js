@@ -125,19 +125,20 @@ describe('async-iterators', function() {
     })
   })
   it('should create a readable stream iterator', function(done) {
-    var createMockStream = function() {
-      var mockStream = stream.Readable({objectMode: true, highWaterMark: 2})
-      var index = 0
-
-      mockStream._read = function() {
-        mockStream.push(numbers[index])
-        index++
-        if (index == numbers.length) mockStream.push(null)
-      }
-
-      return mockStream
+    function MockStream(opt) {
+      stream.Readable.call(this, opt)
+      this.index = 0
     }
-    var mockStream = createMockStream()
+    require('util').inherits(MockStream, stream.Readable)
+
+    MockStream.prototype._read = function() {
+      mockStream.push(numbers[this.index])
+      this.index++
+      if (this.index == numbers.length) mockStream.push(null)
+    }
+    
+    var mockStream = new MockStream(({objectMode: true, highWaterMark: 2}))
+    
     var streamIterator = iterators.fromReadableStream(mockStream)
     iterators.toArray(streamIterator, function(err, res) {
       assert.deepEqual(res, numbers)
