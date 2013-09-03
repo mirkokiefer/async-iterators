@@ -142,6 +142,21 @@ var toArray = function(iterator, cb) {
   })
 }
 
+var range = function(iterator, opts) {
+  var from = opts.from
+  var to = opts.to
+  var pos = -1
+  var next = function(cb) {
+    iterator.next(function(err, value) {
+      pos++
+      if (pos < from) return next(cb)
+      if (pos >= to) return cb(null, undefined)
+      cb(err, value)
+    })
+  }
+  return {next: next}
+}
+
 module.exports = {
   forEach: forEach,
   forEachAsync: forEachAsync,
@@ -151,5 +166,6 @@ module.exports = {
   filterAsync: filterAsync,
   buffer: buffer,
   fromArray: fromArray,
-  toArray: toArray
+  toArray: toArray,
+  range: range
 }
