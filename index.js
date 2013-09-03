@@ -150,7 +150,7 @@ var range = function(iterator, opts) {
     iterator.next(function(err, value) {
       pos++
       if (pos < from) return next(cb)
-      if (pos >= to) return cb(null, undefined)
+      if (pos > to) return cb(null, undefined)
       cb(err, value)
     })
   }
