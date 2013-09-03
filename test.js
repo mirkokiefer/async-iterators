@@ -131,20 +131,20 @@ describe('async-iterators', function() {
       done()
     })
   })
-  // it('should create a range iterator with no end', function(done) {
-  //   var iterator = createMockAsyncIterator()
-  //   var rangeIterator = iterators.range(iterator, {from: 90})
-  //   iterators.toArray(rangeIterator, function(err, res) {
-  //     assert.deepEqual(res, numbers.slice(90))
-  //     done()
-  //   })
-  // })
-  // it('should create a range iterator', function(done) {
-  //   var iterator = createMockAsyncIterator()
-  //   var rangeIterator = iterators.range(iterator, {from: 10, to: 20})
-  //   iterators.toArray(rangeIterator, function(err, res) {
-  //     assert.deepEqual(res, numbers.slice(10, 20))
-  //     done()
-  //   })
-  // })
+  it('should create a range iterator with no end', function(done) {
+    var iterator = createMockAsyncIterator()
+    var rangeIterator = iterators.range(iterator, {from: 90})
+    iterators.toArray(rangeIterator, function(err, res) {
+      assert.deepEqual(res, numbers.slice(90))
+      done()
+    })
+  })
+  it('should create a range iterator with no start', function(done) {
+    var iterator = createMockAsyncIterator()
+    var rangeIterator = iterators.range(iterator, {to: 20})
+    iterators.toArray(rangeIterator, function(err, res) {
+      assert.deepEqual(res, numbers.slice(0, 20))
+      done()
+    })
+  })
 })
