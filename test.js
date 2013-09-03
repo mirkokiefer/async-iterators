@@ -2,6 +2,7 @@
 var assert = require('assert')
 var iterators = require('./index')
 var fs = require('fs')
+var stream = require('stream')
 
 var numbers = []
 for (var i = 1; i < 100; i++) {
@@ -119,6 +120,26 @@ describe('async-iterators', function() {
   it('should create an array iterator', function(done) {
     var arrayIterator = iterators.fromArray(numbers)
     iterators.toArray(arrayIterator, function(err, res) {
+      assert.deepEqual(res, numbers)
+      done()
+    })
+  })
+  it('should create a readable stream iterator', function(done) {
+    var createMockStream = function() {
+      var mockStream = stream.Readable({objectMode: true, highWaterMark: 2})
+      var index = 0
+
+      mockStream._read = function() {
+        mockStream.push(numbers[index])
+        index++
+        if (index == numbers.length) mockStream.push(null)
+      }
+
+      return mockStream
+    }
+    var mockStream = createMockStream()
+    var streamIterator = iterators.fromReadableStream(mockStream)
+    iterators.toArray(streamIterator, function(err, res) {
       assert.deepEqual(res, numbers)
       done()
     })
