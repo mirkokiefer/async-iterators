@@ -1,24 +1,26 @@
 
 var EventEmitter = require('events').EventEmitter
 
-var forEach = function(iterator, fn, cb) {
+var iterators = {}
+
+iterators.forEach = function(iterator, fn, cb) {
   iterator.next(function(err, res) {
     if (res === undefined) return cb(err, undefined)
     fn(err, res)
-    forEach(iterator, fn, cb)
+    iterators.forEach(iterator, fn, cb)
   })
 }
 
-var forEachAsync = function(iterator, fn, cb) {
+iterators.forEachAsync = function(iterator, fn, cb) {
   iterator.next(function(err, res) {
     if (res === undefined) return cb(err, undefined)
     fn(err, res, function() {
-      forEachAsync(iterator, fn, cb)      
+      iterators.forEachAsync(iterator, fn, cb)      
     })
   })
 }
 
-var map = function(iterator, fn) {
+iterators.map = function(iterator, fn) {
   return {
     next: function(cb) {
       iterator.next(function(err, res) {
@@ -30,7 +32,7 @@ var map = function(iterator, fn) {
   }
 }
 
-var mapAsync = function(iterator, fn) {
+iterators.mapAsync = function(iterator, fn) {
   return {
     next: function(cb) {
       iterator.next(function(err, res) {
@@ -43,7 +45,7 @@ var mapAsync = function(iterator, fn) {
   }
 }
 
-var filter = function(iterator, fn) {
+iterators.filter = function(iterator, fn) {
   var next = function(cb) {
     iterator.next(function(err, res) {
       if (res === undefined) return cb(err, undefined)
@@ -59,7 +61,7 @@ var filter = function(iterator, fn) {
   }
 }
 
-var filterAsync = function(iterator, fn) {
+iterators.filterAsync = function(iterator, fn) {
   var next = function(cb) {
     iterator.next(function(err, res) {
       if (res === undefined) return cb(err, undefined)
@@ -77,7 +79,7 @@ var filterAsync = function(iterator, fn) {
   }
 }
 
-var buffer = function(iterator, size) {
+iterators.buffer = function(iterator, size) {
   var buffer = []
   var bufferingInProgress = false
   var hasEnded = false
@@ -121,7 +123,7 @@ var buffer = function(iterator, size) {
   return publicObj
 }
 
-var fromArray = function(array, cb) {
+iterators.fromArray = function(array, cb) {
   var i = 0
   return {
     next: function(cb) {
@@ -133,7 +135,7 @@ var fromArray = function(array, cb) {
   }
 }
 
-var fromReadableStream = function(readable) {
+iterators.fromReadableStream = function(readable) {
   var isReadable = true
   var hasEnded = false
 
@@ -168,16 +170,16 @@ var fromReadableStream = function(readable) {
   return {next: next}
 }
 
-var toArray = function(iterator, cb) {
+iterators.toArray = function(iterator, cb) {
   var array = []
-  forEach(iterator, function(err, each) {
+  iterators.forEach(iterator, function(err, each) {
     array.push(each)
   }, function() {
     cb(null, array)
   })
 }
 
-var range = function(iterator, opts) {
+iterators.range = function(iterator, opts) {
   var from = opts.from
   var to = opts.to
   var pos = -1
@@ -192,7 +194,7 @@ var range = function(iterator, opts) {
   return {next: next}
 }
 
-var toWritableStream = function(iterator, writeStream, encoding, cb) {
+iterators.toWritableStream = function(iterator, writeStream, encoding, cb) {
   write(cb);
   function write(cb) {
     iterator.next(function(err, res) {
@@ -206,17 +208,4 @@ var toWritableStream = function(iterator, writeStream, encoding, cb) {
   }
 }
 
-module.exports = {
-  forEach: forEach,
-  forEachAsync: forEachAsync,
-  map: map,
-  mapAsync: mapAsync,
-  filter: filter,
-  filterAsync: filterAsync,
-  buffer: buffer,
-  fromArray: fromArray,
-  fromReadableStream: fromReadableStream,
-  toArray: toArray,
-  toWritableStream: toWritableStream,
-  range: range
-}
+module.exports = iterators
