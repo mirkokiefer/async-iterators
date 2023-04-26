@@ -78,7 +78,7 @@ var readStream = fs.createReadStream('input.txt', {encoding: 'utf8'})
 var streamIterator = iterators.fromReadableStream(readStream)
 ```
 
-##Transforming Iterators
+## Transforming Iterators
 
 <a name="map" />
 ### map(iterator, mapFn)
@@ -178,7 +178,6 @@ iterators.toWritableStream(iterator, writeStream, 'utf8', function() {
 
 ## Utilities
 
-<a name="forEach" />
 ### forEach(iterator, fn, cb)
 Reads the source iterator and invokes `fn` for each value of the iterator.
 
