@@ -1,5 +1,4 @@
 # async-iterators
-[![Build Status](https://travis-ci.org/mirkokiefer/async-iterators.png?branch=master)](https://travis-ci.org/mirkokiefer/async-iterators)
 
 [![NPM](https://nodei.co/npm/async-iterators.png)](https://nodei.co/npm/async-iterators/)
 
