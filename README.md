@@ -62,7 +62,9 @@ iterators.toArray(doublingIterator, function(err, res) {
 ## Iterator Sources
 
 <a name="fromArray" />
+
 ### fromArray(array)
+
 Creates an iterator from an array.
 
 ``` js
@@ -70,7 +72,9 @@ var arrayIterator = iterators.fromArray(numbers)
 ```
 
 <a name="fromReadableStream" />
+
 ### fromReadableStream(readableStream)
+
 Creates an iterator from a [Readable Stream](http://nodejs.org/api/stream.html#stream_class_stream_readable).
 
 ``` js
@@ -81,7 +85,9 @@ var streamIterator = iterators.fromReadableStream(readStream)
 ## Transforming Iterators
 
 <a name="map" />
+
 ### map(iterator, mapFn)
+
 Create an iterator that applies a map function to transform each value of the source iterator.
 
 ``` js
@@ -96,6 +102,7 @@ iterators.toArray(mapIterator, function(err, res) {
 ```
 
 <a name="mapAsync" />
+
 ### mapAsync(iterator, mapFn)
 
 ``` js
@@ -104,8 +111,9 @@ var mapIterator = iterators.map(someNumberIterator, function(err, each, cb) {
 })
 ```
 
-<a name="filter" />
 Create an iterator that filters the values of the source iterator using a filter function.
+
+<a name="filter" />
 
 ### filter(iterator, filterFn)
 
@@ -116,6 +124,7 @@ var evenNumbersIterator = iterators.filter(someNumberIterator, function(err, eac
 ```
 
 <a name="filterAsync" />
+
 ### filterAsync(iterator, filterFn)
 
 ``` js
@@ -125,7 +134,9 @@ var evenNumbersIterator = iterators.filter(someNumberIterator, function(err, eac
 ```
 
 <a name="range" />
+
 ### range(iterator, range)
+
 Creates an iterator that only iteratores over the specified range.
 
 `range` is specified as `{from: startIndex, to: endIndex}` where `from` and `to` are both inclusive.
@@ -135,7 +146,9 @@ var rangeIterator = iterators.range(iterator, {from: 10, to: 19})
 ```
 
 <a name="buffer" />
+
 ### buffer(iterator, bufferSize)
+
 Creates an iterator with an internal buffer that is always filled until `bufferSize`.
 The buffer can abviously only grow if the buffer iterator is read slower than the underlying iterator source can return data.
 
@@ -153,10 +166,12 @@ console.log(bufferedIterator.bufferFillRatio())
 bufferedIterator.setBufferSize(100)
 ```
 
-##Iterator Targets
+## Iterator Targets
 
 <a name="toArray" />
+
 ### toArray(iterator, cb)
+
 Reads the source iterator and writes the results to an array.
 
 ``` js
@@ -166,7 +181,9 @@ iterators.toArray(someIterator, function(err, array) {
 ```
 
 <a name="toWritableStream" />
+
 ### toWritableStream(iterator, writeStream, encoding, cb)
+
 Reads the source iterator and writes the result to a [Writable Stream](http://nodejs.org/api/stream.html#stream_class_stream_writable).
 
 ``` js
@@ -179,6 +196,7 @@ iterators.toWritableStream(iterator, writeStream, 'utf8', function() {
 ## Utilities
 
 ### forEach(iterator, fn, cb)
+
 Reads the source iterator and invokes `fn` for each value of the iterator.
 
 ``` js
@@ -190,7 +208,9 @@ iterators.forEach(someIterator, function(err, data) {
 ```
 
 <a name="forEachAsync" />
+
 ### forEachAsync(iterator, fn, cb)
+
 Reads the source iterator and invokes `fn` for each value of the iterator.
 Only once the callback is invoked the next value is read from the source iterator.
 
