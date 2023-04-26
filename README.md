@@ -1,4 +1,4 @@
-#async-iterators
+# async-iterators
 [![Build Status](https://travis-ci.org/mirkokiefer/async-iterators.png?branch=master)](https://travis-ci.org/mirkokiefer/async-iterators)
 
 [![NPM](https://nodei.co/npm/async-iterators.png)](https://nodei.co/npm/async-iterators/)
@@ -41,25 +41,25 @@ iterators.toArray(doublingIterator, function(err, res) {
 })
 ```
 
-##Documentation
-###Iterator Sources
+## Documentation
+### Iterator Sources
 - [fromArray](#fromArray)
 - [fromReadableStream](#fromReadableStream)
 
-###Transforming Iterators
+### Transforming Iterators
 - [map](#map) / [mapAsync](#mapAsync)
 - [filter](#filter) / [filterAsync](#filterAsync)
 - [range](#range)
 - [buffer](#buffer)
 
-###Iterator Targets
+### Iterator Targets
 - [toArray](#toArray)
 - [toWritableStream](#toWritableStream)
 
-###Utilities
+### Utilities
 - [forEach](#forEach)
 
-##Iterator Sources
+## Iterator Sources
 
 <a name="fromArray" />
 ### fromArray(array)
@@ -176,7 +176,7 @@ iterators.toWritableStream(iterator, writeStream, 'utf8', function() {
 })
 ```
 
-##Utilities
+## Utilities
 
 <a name="forEach" />
 ### forEach(iterator, fn, cb)
@@ -204,12 +204,12 @@ iterators.forEachAsync(someIterator, function(err, data, cb) {
 })
 ```
 
-##Other libraries
+## Other libraries
 
 Some libraries using the async iterator pattern:
 
 - [stream-iterator](https://github.com/mirkokiefer/stream-iterator) - wrap any stream into an async iterator
 - [node-leveldown](https://github.com/rvagg/node-leveldown#iteratornextcallback) - allows you to iterate over entries in LevelDB
 
-##Contributors
+## Contributors
 This project was created by Mirko Kiefer ([@mirkokiefer](https://github.com/mirkokiefer)).
